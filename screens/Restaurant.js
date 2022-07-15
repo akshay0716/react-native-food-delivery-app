@@ -71,7 +71,7 @@ export default function Restaurant({navigation, route}) {
       <Animated.ScrollView
         horizontal
         pagingEnabled
-        scrollEventThrottle={16}
+        scrollEventThrottle={5}
         snapToAlignment="center"
         showsHorizontalScrollIndicator={true}>
         {item?.menu.map((item, index) => (

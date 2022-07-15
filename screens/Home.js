@@ -9,9 +9,13 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {icons, images, COLORS, FONTS, SIZES} from './../constants';
-import {categoryData, restaurantData} from './dummyData';
+import {
+  categoryData,
+  restaurantData,
+  initialCurrentLocation,
+} from './dummyData';
 
-export default function Home() {
+export default function Home({navigation}) {
   const [selectedCategory, setSelectedCategories] = useState({});
   const [restaurants, setRestaurants] = useState([]);
 
@@ -24,6 +28,16 @@ export default function Home() {
     setSelectedCategories(category);
     setRestaurants(restaurantsList);
   }
+
+  const getCategoryNameById = categoryId => {
+    let category = categoryData.filter(ele => ele.id === categoryId);
+
+    if (category.length > -1) {
+      return category[0].name;
+    } else {
+      return '';
+    }
+  };
 
   const renderHeader = () => {
     return (
@@ -144,8 +158,9 @@ export default function Home() {
         <TouchableOpacity
           style={{marginBottom: SIZES.padding * 2}}
           // navigate to restaurant details
-          // onPress={}
-        >
+          onPress={() =>
+            navigation.navigate('Restaurant', {item, initialCurrentLocation})
+          }>
           <View style={{marginBottom: SIZES.padding}}>
             <Image
               source={item.photo}
@@ -184,6 +199,29 @@ export default function Home() {
               }}
             />
             <Text style={{...FONTS.body3}}>{item.rating}</Text>
+            {/* CATEGORIES */}
+            <View
+              style={{
+                flexDirection: 'row',
+                marginLeft: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {item.categories.map((categoryId, index) => {
+                return (
+                  <View
+                    style={{flexDirection: 'row', marginLeft: 10}}
+                    key={categoryId}>
+                    <Text style={{...FONTS.body3}}>
+                      {getCategoryNameById(categoryId)}
+                    </Text>
+                    <Text style={{...FONTS.body3}}> .</Text>
+                  </View>
+                );
+              })}
+              {/* PRICE SETCION */}
+              <Text style={{marginLeft: 10, ...FONTS.body3}}>$ 15</Text>
+            </View>
           </View>
         </TouchableOpacity>
       );
